@@ -57,7 +57,6 @@ def animar_caminho(col, row, board_size=6):
             else:
                 linha.append(grid[i][j])
         print(f"{i} {' '.join(linha)}")
-    print("\nAlvo atingido!\n")
     time.sleep(0.8)
 
 def mostrar_tabuleiro(tabuleiro, revelar=False):
@@ -145,6 +144,8 @@ while True:
         print("[RESPOSTA DO SERVIDOR]:", resposta)
 
         if "Fim de jogo" in resposta:
+            print("Jogo finalizado. Encerrando cliente...")
+            client.close()
             break
 
         atualizacao = client.recv(4096).decode()
@@ -169,10 +170,12 @@ while True:
 
             print("\n=== Seu tabuleiro atualizado ===")
             mostrar_tabuleiro(tabuleiro, revelar=True)
-            print("\n=== Tabuleiro inimigo atualizado ===")
-            mostrar_tabuleiro(tabuleiro_inimigo)
+        elif "Fim de jogo" in data:
+            print(data)
+            print("Jogo finalizado. Encerrando cliente...")
+            client.close()
+            break
         else:
             print("[MENSAGEM DO SERVIDOR]:", data)
 
         sua_vez = True
-

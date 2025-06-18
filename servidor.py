@@ -99,10 +99,17 @@ def handle_jogador(indice):
             resultado = processar_tiro(tabuleiros[adversario], x, y)
 
             if tudo_afundado(tabuleiros[adversario]):
-                msg_fim = "Fim de jogo: você venceu!"
-                jogadores[indice].send(msg_fim.encode())
-                jogadores[adversario].send("Fim de jogo: você perdeu!".encode())
+                msg_vencedor = "Fim de jogo: você venceu!"
+                msg_perdedor = "Fim de jogo: você perdeu!"
+                jogadores[indice].send(msg_vencedor.encode())
+                jogadores[adversario].send(msg_perdedor.encode())
+
                 print("[SERVIDOR] Jogo encerrado.")
+
+                # Fechar conexões explicitamente
+                jogadores[indice].close()
+                jogadores[adversario].close()
+
                 break
 
             jogadores[indice].send(resultado.encode())
@@ -122,4 +129,3 @@ threading.Thread(target=handle_jogador, args=(1,), daemon=True).start()
 
 while True:
     pass
-
